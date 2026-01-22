@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ToDoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cat_Estatus">
+          <Key>
+            <PropertyRef Name="n_IdEstatus" />
+          </Key>
+          <Property Name="n_IdEstatus" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="c_Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Op_Tareas">
+          <Key>
+            <PropertyRef Name="n_IdTarea" />
+          </Key>
+          <Property Name="n_IdTarea" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="c_Titulo" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="c_Descripcion" Type="nvarchar(max)" />
+          <Property Name="n_IdEstatus" Type="int" Nullable="false" />
+          <Property Name="b_Habilitado" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_OpTareas_CatEstatus">
+          <End Role="Cat_Estatus" Type="Self.Cat_Estatus" Multiplicity="1" />
+          <End Role="Op_Tareas" Type="Self.Op_Tareas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_Estatus">
+              <PropertyRef Name="n_IdEstatus" />
+            </Principal>
+            <Dependent Role="Op_Tareas">
+              <PropertyRef Name="n_IdEstatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="RCSP_AddTarea" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Titulo" Type="nvarchar" Mode="In" />
+          <Parameter Name="Descripcion" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="RCSP_DeleteTareas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdTarea" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RCSP_GetTareaPendiComple" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FiltroIdEstatus" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RCSP_UpdateEstatusTarea" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdTarea" Type="int" Mode="In" />
+          <Parameter Name="NuevoIdEstatus" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="ToDoModelStoreContainer">
+          <EntitySet Name="Cat_Estatus" EntityType="Self.Cat_Estatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Op_Tareas" EntityType="Self.Op_Tareas" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_OpTareas_CatEstatus" Association="Self.FK_OpTareas_CatEstatus">
+            <End Role="Cat_Estatus" EntitySet="Cat_Estatus" />
+            <End Role="Op_Tareas" EntitySet="Op_Tareas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ToDoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ToDoEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cat_Estatus" EntityType="ToDoModel.Cat_Estatus" />
+          <EntitySet Name="Op_Tareas" EntityType="ToDoModel.Op_Tareas" />
+          <AssociationSet Name="FK_OpTareas_CatEstatus" Association="ToDoModel.FK_OpTareas_CatEstatus">
+            <End Role="Cat_Estatus" EntitySet="Cat_Estatus" />
+            <End Role="Op_Tareas" EntitySet="Op_Tareas" />
+          </AssociationSet>
+          <FunctionImport Name="RCSP_AddTarea" ReturnType="Collection(Decimal)">
+            <Parameter Name="Titulo" Mode="In" Type="String" />
+            <Parameter Name="Descripcion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="RCSP_DeleteTareas">
+            <Parameter Name="IdTarea" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="RCSP_GetTareaPendiComple" ReturnType="Collection(ToDoModel.RCSP_GetTareaPendiComple_Result)">
+            <Parameter Name="FiltroIdEstatus" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="RCSP_UpdateEstatusTarea">
+            <Parameter Name="IdTarea" Mode="In" Type="Int32" />
+            <Parameter Name="NuevoIdEstatus" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="Cat_Estatus">
+          <Key>
+            <PropertyRef Name="n_IdEstatus" />
+          </Key>
+          <Property Name="n_IdEstatus" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="c_Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Op_Tareas" Relationship="ToDoModel.FK_OpTareas_CatEstatus" FromRole="Cat_Estatus" ToRole="Op_Tareas" />
+        </EntityType>
+        <EntityType Name="Op_Tareas">
+          <Key>
+            <PropertyRef Name="n_IdTarea" />
+          </Key>
+          <Property Name="n_IdTarea" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="c_Titulo" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="c_Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="n_IdEstatus" Type="Int32" Nullable="false" />
+          <Property Name="b_Habilitado" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Cat_Estatus" Relationship="ToDoModel.FK_OpTareas_CatEstatus" FromRole="Op_Tareas" ToRole="Cat_Estatus" />
+        </EntityType>
+        <Association Name="FK_OpTareas_CatEstatus">
+          <End Type="ToDoModel.Cat_Estatus" Role="Cat_Estatus" Multiplicity="1" />
+          <End Type="ToDoModel.Op_Tareas" Role="Op_Tareas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_Estatus">
+              <PropertyRef Name="n_IdEstatus" />
+            </Principal>
+            <Dependent Role="Op_Tareas">
+              <PropertyRef Name="n_IdEstatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="RCSP_GetTareaPendiComple_Result">
+          <Property Type="Int32" Name="n_IdTarea" Nullable="false" />
+          <Property Type="String" Name="c_Titulo" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="c_Descripcion" Nullable="true" />
+          <Property Type="Int32" Name="n_IdEstatus" Nullable="false" />
+          <Property Type="String" Name="c_NombreEstatus" Nullable="false" MaxLength="50" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ToDoModelStoreContainer" CdmEntityContainer="ToDoEntities">
+          <EntitySetMapping Name="Cat_Estatus">
+            <EntityTypeMapping TypeName="ToDoModel.Cat_Estatus">
+              <MappingFragment StoreEntitySet="Cat_Estatus">
+                <ScalarProperty Name="c_Nombre" ColumnName="c_Nombre" />
+                <ScalarProperty Name="n_IdEstatus" ColumnName="n_IdEstatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Op_Tareas">
+            <EntityTypeMapping TypeName="ToDoModel.Op_Tareas">
+              <MappingFragment StoreEntitySet="Op_Tareas">
+                <ScalarProperty Name="b_Habilitado" ColumnName="b_Habilitado" />
+                <ScalarProperty Name="n_IdEstatus" ColumnName="n_IdEstatus" />
+                <ScalarProperty Name="c_Descripcion" ColumnName="c_Descripcion" />
+                <ScalarProperty Name="c_Titulo" ColumnName="c_Titulo" />
+                <ScalarProperty Name="n_IdTarea" ColumnName="n_IdTarea" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="RCSP_AddTarea" FunctionName="ToDoModel.Store.RCSP_AddTarea" />
+          <FunctionImportMapping FunctionImportName="RCSP_DeleteTareas" FunctionName="ToDoModel.Store.RCSP_DeleteTareas" />
+          <FunctionImportMapping FunctionImportName="RCSP_GetTareaPendiComple" FunctionName="ToDoModel.Store.RCSP_GetTareaPendiComple">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ToDoModel.RCSP_GetTareaPendiComple_Result">
+                <ScalarProperty Name="n_IdTarea" ColumnName="n_IdTarea" />
+                <ScalarProperty Name="c_Titulo" ColumnName="c_Titulo" />
+                <ScalarProperty Name="c_Descripcion" ColumnName="c_Descripcion" />
+                <ScalarProperty Name="n_IdEstatus" ColumnName="n_IdEstatus" />
+                <ScalarProperty Name="c_NombreEstatus" ColumnName="c_NombreEstatus" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="RCSP_UpdateEstatusTarea" FunctionName="ToDoModel.Store.RCSP_UpdateEstatusTarea" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

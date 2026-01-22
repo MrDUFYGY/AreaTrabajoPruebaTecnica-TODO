@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="BL/BL.csproj" Id="3123e4cb-d6c4-4c12-859c-550f195b18d7" />
+  <Project Path="DL_EF/DL_EF.csproj" Id="e31dd017-f038-444c-9b9c-555dbe351799" />
+  <Project Path="ML/ML.csproj" Id="f5f4b408-cf0a-4ab7-9c51-a8f014b60034" />
+  <Project Path="SL-API-TODO/SL-API-TODO.csproj" Id="e97fc3c5-9621-43bb-8952-a136635757fd" />
+</Solution>
